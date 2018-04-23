@@ -1,0 +1,13 @@
+.DS_Store
+Temp/
+Library/
+*.sln
+*.suo
+*.pidb
+*.userprefs
+*.csproj
+/obj
+/Assets/UnityVS
+/Assets/UnityVS.meta
+/.vs
+sysinfo.txt
