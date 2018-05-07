@@ -5,8 +5,10 @@ using System.Collections.Generic;
 namespace CoreToolkit {
     public static class CoreToolkitTime {
 
-        public static long CurrentTimestamp() {
-            return new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+        public static long CurrentTimestamp {
+            get {
+                return new DateTimeOffset(DateTime.UtcNow).ToUnixTimeMilliseconds();
+            }
         }
     }
 }
