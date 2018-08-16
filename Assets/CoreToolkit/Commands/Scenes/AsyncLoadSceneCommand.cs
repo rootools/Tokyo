@@ -13,16 +13,17 @@ namespace CoreToolkit.Command {
         }
 
         protected override void ExecInternal() {
-            AsyncOperation ao = SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
-            CoreToolkitCommandMB.Instance().StartCoroutine(WaitUntilSceneLoaded(ao, () => {
-                NotifyComplete();
-            }));
+            CoreToolkitCommandMB.Instance().StartCoroutine(LoadScene());
         }
 
-        private IEnumerator WaitUntilSceneLoaded(AsyncOperation ao, Action callback = null) {
-            yield return new WaitUntil(() => ao.isDone);
-            if (callback != null)
-                callback();
+        private IEnumerator LoadScene() {
+            AsyncOperation ao = SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
+
+            while(!ao.isDone) {
+                yield return null;
+            }
+
+            NotifyComplete();
         }
 
     }
