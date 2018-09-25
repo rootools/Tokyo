@@ -24,6 +24,12 @@ namespace CoreToolkit.Command {
             if (Complete)
                 return;
 
+            if(Terminate) {
+                foreach (ICommand cmd in queue)
+                    cmd.TerminateCommand();
+                NotifyComplete();
+            }
+
             if(queue.Count > 0) {
                 ICommand cmd = queue[0];
                 queue.RemoveAt(0);
