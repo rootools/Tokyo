@@ -39,11 +39,13 @@ namespace CoreToolkit {
             if (OnLerpUpdate != null)
                 OnLerpUpdate(this);
 
-            if (_progress == 1f && OnLerpEnd != null) {
-                OnLerpEnd(this);
-                CoreToolkitLerpManager.Instance().RemoveLerpTask(this);
-            }
-                
+            if (_progress == 1f && OnLerpEnd != null)
+                Terminate();
+        }
+        
+        public void Terminate() {
+            OnLerpEnd(this);
+            CoreToolkitLerpManager.Instance().RemoveLerpTask(this);
         }
 
     }
