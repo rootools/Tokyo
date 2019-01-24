@@ -4,5 +4,5 @@ using UnityEngine;
 using CoreToolkit;
 
 namespace CoreToolkit.Command {
-	public class CoreToolkitCommandMB : MBSingleton<CoreToolkitCommandMB> {}
+	public class CoreToolkitCommandMB : MBSingletonDD<CoreToolkitCommandMB> {}
 }

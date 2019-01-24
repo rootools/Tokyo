@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace CoreToolkit {
 
-    public class CoreToolkitLerpManager : MBSingleton<CoreToolkitLerpManager> {
+    public class CoreToolkitLerpManager : MBSingletonDD<CoreToolkitLerpManager> {
 
         private List<CoreToolkitLerp> _tasksList = new List<CoreToolkitLerp>();
 

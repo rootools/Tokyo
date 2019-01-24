@@ -2,7 +2,7 @@
 using System.Collections;
 
 namespace CoreToolkit {
-    public class MBSingleton<T> : MonoBehaviour where T : MonoBehaviour {
+    public class MBSingletonDD<T> : MonoBehaviour where T : MonoBehaviour {
         private static T s_Instance;
         private static object m_Lock = new object();
         private static bool s_ApplicationStopping = false;
@@ -21,7 +21,10 @@ namespace CoreToolkit {
                         GameObject singleton = new GameObject();
                         s_Instance = singleton.AddComponent<T>();
                         singleton.name = typeof(T).ToString();
-                        Debug.Log("MBSingleton: An instance of " + typeof(T) + " is needed in the scene, so it was created.");
+                        if (Application.isPlaying) {
+                            DontDestroyOnLoad(singleton);
+                        }
+                        Debug.Log("MBSingleton: An instance of " + typeof(T) + " is needed in the scene, so it was created with DontDestroyOnLoad.");
                     }
                 }
                 return s_Instance;
