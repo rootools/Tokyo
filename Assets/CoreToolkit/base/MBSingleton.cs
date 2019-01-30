@@ -28,6 +28,10 @@ namespace CoreToolkit {
             }
         }
 
+        private void OnDestroy() {
+            s_Instance = null;
+        }
+
         protected virtual void OnApplicationQuit() {
             s_ApplicationStopping = true;
         }
