@@ -8,6 +8,9 @@ namespace CoreToolkit.Command {
 
         private readonly string _sceneName;
 
+        public delegate void OnProgressChangeDelegate(float progress);
+        public OnProgressChangeDelegate OnProgressChange;
+
         public AsyncLoadSceneCommand(string sceneName) {
             _sceneName = sceneName;
         }
@@ -20,6 +23,8 @@ namespace CoreToolkit.Command {
             AsyncOperation ao = SceneManager.LoadSceneAsync(_sceneName, LoadSceneMode.Additive);
 
             while(!ao.isDone) {
+                if (OnProgressChange != null)
+                    OnProgressChange(ao.progress);
                 yield return null;
             }
 
