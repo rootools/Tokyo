@@ -1,2 +1,2 @@
 deploy:
-	git subtree push --prefix Assets/CoreToolkit origin upm
+	git subtree push --prefix Assets/ origin upm
