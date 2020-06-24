@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CoreToolkit.Math;
 
 namespace CoreToolkit {
 
@@ -8,6 +9,7 @@ namespace CoreToolkit {
         public float From;
         public float To;
         public float Time;
+        public EaseType Easing = EaseType.Linear;
 
         private float _progress;
         public float Progress { get { return _progress; } }
@@ -22,19 +24,19 @@ namespace CoreToolkit {
         public event OnLerpUpdateDelegate OnLerpEnd;
 
 
-        public CoreToolkitLerp(float from, float to, float time) {
+        public CoreToolkitLerp(float from, float to, float time, EaseType easeType = EaseType.Linear) {
             From = from;
             To = to;
             Time = time;
+            Easing = easeType;
 
             _startTime = UnityEngine.Time.time;
             CoreToolkitLerpManager.Instance().AddLerpTask(this);
-
         }
 
         public void Iterate() {
             _progress = Mathf.Clamp01((UnityEngine.Time.time - _startTime) / Time);
-            _value = Mathf.Lerp(From, To, _progress);
+            _value = Mathf.Lerp(From, To, CoreToolkitEasings.Ease(_progress, Easing));
 
             if (OnLerpUpdate != null)
                 OnLerpUpdate(this);
