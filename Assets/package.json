@@ -1,6 +1,6 @@
 {
   "name": "com.abravin.coretoolkit",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "displayName": "CoreToolkit",
   "description": "Basic samples & patterns of code which will be useful in any project",
   "unity": "2019.3",
