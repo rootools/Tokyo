@@ -19,10 +19,15 @@ namespace CoreToolkit {
 
         private float _startTime;
 
+        private float _startPauseTime;
+        private float _pauseTimeOffset;
+
+        private bool _isPaused = false;
+        public bool IsPaused { get { return _isPaused; } }
+
         public delegate void OnLerpUpdateDelegate(CoreToolkitLerp lerp);
         public event OnLerpUpdateDelegate OnLerpUpdate;
         public event OnLerpUpdateDelegate OnLerpEnd;
-
 
         public CoreToolkitLerp(float from, float to, float time, EaseType easeType = EaseType.Linear) {
             From = from;
@@ -35,7 +40,10 @@ namespace CoreToolkit {
         }
 
         public void Iterate() {
-            _progress = Mathf.Clamp01((UnityEngine.Time.time - _startTime) / Time);
+            if (IsPaused)
+                return;
+
+            _progress = Mathf.Clamp01((UnityEngine.Time.time - _pauseTimeOffset - _startTime) / Time);
             _value = Mathf.Lerp(From, To, CoreToolkitEasings.Ease(_progress, Easing));
 
             if (OnLerpUpdate != null)
@@ -51,6 +59,16 @@ namespace CoreToolkit {
         public void Stop() {
             OnLerpEnd = null;
             CoreToolkitLerpManager.Instance().RemoveLerpTask(this);
+        }
+
+        public void Pause() {
+            _isPaused = true;
+            _startPauseTime = UnityEngine.Time.time;
+        }
+
+        public void Resume() {
+            _isPaused = false;
+            _pauseTimeOffset = UnityEngine.Time.time - _startPauseTime;
         }
 
     }
