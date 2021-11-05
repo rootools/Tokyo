@@ -57,6 +57,7 @@ namespace CoreToolkit {
         }
 
         public void Stop() {
+            OnLerpUpdate = null;
             OnLerpEnd = null;
             CoreToolkitLerpManager.Instance().RemoveLerpTask(this);
         }
