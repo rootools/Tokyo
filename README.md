@@ -1,4 +1,6 @@
 # Welcome to Tokyo!
+![](https://github.com/rootools/brav.in/raw/master/assets/tokyo_logo.png)
+
 Hello! My name is Anton and I am developer of [Masterplan Tycoon](https://store.steampowered.com/app/1644500?utm_source=github_tokyo).
 
 Every programmer loves some parts of his code and constantly drags them with him from project to project. At some point, I had more than two of these pieces and I decided to combine it together. This is how Tokyo (formerly CoreToolkit) was born. It wasn't meant to be a slender and versatile framework, but more like jQuery — just a set of features that have made my life easier for several years now.
