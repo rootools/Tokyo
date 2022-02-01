@@ -17,19 +17,25 @@ namespace Tokyo {
         private float _startPauseTime;
         private float _pauseTimeOffset;
 
+        private bool _isIgnoreTimeScale;
+
+        private float CurrentTime => (_isIgnoreTimeScale) ? UnityEngine.Time.realtimeSinceStartup : UnityEngine.Time.time;
+
         public bool IsPaused { get; private set; }
 
         public delegate void OnLerpUpdateDelegate(TokyoLerp lerp);
         public event OnLerpUpdateDelegate OnLerpUpdate;
         public event OnLerpUpdateDelegate OnLerpEnd;
 
-        public TokyoLerp(float from, float to, float time, EaseType easeType = EaseType.Linear) {
+        public TokyoLerp(float from, float to, float time, EaseType easeType = EaseType.Linear, bool isIgnoreTimeScale = false) {
             From = from;
             To = to;
             Time = time;
             Easing = easeType;
 
-            _startTime = UnityEngine.Time.time;
+            _isIgnoreTimeScale = isIgnoreTimeScale;
+
+            _startTime = CurrentTime;
             TokyoLerpManager.Instance().AddLerpTask(this);
         }
 
@@ -37,7 +43,7 @@ namespace Tokyo {
             if (IsPaused)
                 return;
 
-            Progress = (Time == 0f) ? 1f: Mathf.Clamp01((UnityEngine.Time.time - _pauseTimeOffset - _startTime) / Time);
+            Progress = (Time == 0f) ? 1f: Mathf.Clamp01((CurrentTime - _pauseTimeOffset - _startTime) / Time);
             Value = Mathf.Lerp(From, To, TokyoEasings.Ease(Progress, Easing));
 
             OnLerpUpdate?.Invoke(this);
@@ -56,12 +62,12 @@ namespace Tokyo {
 
         public void Pause() {
             IsPaused = true;
-            _startPauseTime = UnityEngine.Time.time;
+            _startPauseTime = CurrentTime;
         }
 
         public void Resume() {
             IsPaused = false;
-            _pauseTimeOffset = UnityEngine.Time.time - _startPauseTime;
+            _pauseTimeOffset = CurrentTime - _startPauseTime;
         }
 
     }
