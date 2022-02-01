@@ -39,7 +39,7 @@ namespace Tokyo.Fader {
 
             _fadeLerp = new TokyoLerp(fadeConfig.FromFaderAlpha,
                                       fadeConfig.ToFaderAlpha,
-                                      fadeConfig.Time);
+                                      fadeConfig.Time, isIgnoreTimeScale: true);
 
             _fadeLerp.OnLerpUpdate += (lrp) => {
                 Color currentColor = _faderImage.color;
