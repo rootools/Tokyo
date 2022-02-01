@@ -37,7 +37,7 @@ namespace Tokyo {
             if (IsPaused)
                 return;
 
-            Progress = Mathf.Clamp01((UnityEngine.Time.time - _pauseTimeOffset - _startTime) / Time);
+            Progress = (Time == 0f) ? 1f: Mathf.Clamp01((UnityEngine.Time.time - _pauseTimeOffset - _startTime) / Time);
             Value = Mathf.Lerp(From, To, TokyoEasings.Ease(Progress, Easing));
 
             OnLerpUpdate?.Invoke(this);
