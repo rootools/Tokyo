@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace Tokyo.Fader {
-    public class TokyoFader : MBSingleton<TokyoFader> {
+    public class TokyoFader : MBSingletonDD<TokyoFader> {
 
         public Action OnFadeComplete;
 
