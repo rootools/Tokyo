@@ -49,10 +49,9 @@ namespace Tokyo {
             if (Time == 0f)
                 Progress = 1f;
             else {
-                float passedTime = CurrentTime - _pauseTimeOffset - _startTime;
-                float requiredTime = Time - (Time * _manualSetProgress);
+                float passedTime = CurrentTime - _pauseTimeOffset - _startTime + (Time * _manualSetProgress);
 
-                Progress = (requiredTime == 0f) ? 1f : Mathf.Clamp01(passedTime / requiredTime);
+                Progress = Mathf.Clamp01(passedTime / Time);
             }
 
             Value = Mathf.Lerp(From, To, TokyoEasings.Ease(Progress, Easing));
