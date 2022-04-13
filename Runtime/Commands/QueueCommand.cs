@@ -19,6 +19,10 @@ namespace Tokyo.Command {
         public void AddCommandCompleteHandler(Action<QueueCommand, ICommand> completeHandler) {
             CommandCompleteEvent += completeHandler;
         }
+        
+        public void AddCommandCompleteHandler<T>(Action<QueueCommand, ICommand, T> completeHandler, T userArgs) {
+            CommandCompleteEvent += (queue, cmd) => completeHandler?.Invoke(queue, cmd, userArgs);
+        }
 
         protected virtual void Run() {
             if (Complete)
