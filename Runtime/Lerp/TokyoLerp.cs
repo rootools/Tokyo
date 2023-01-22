@@ -13,11 +13,12 @@ namespace Tokyo {
         public float To { get; private set; }
         public float Time { get; private set; }
         public EaseType Easing  { get; private set; }
+        public UpdateType UpdateType { get; private set; }
 
         public float Progress { get; private set; }
         public float Value { get; private set; }
         public bool IsPaused { get; private set; }
-        public bool IsStopped { get; private set; }
+        public bool IsEnded { get; private set; }
 
         private float CurrentTime => (_isIgnoreTimeScale) ? UnityEngine.Time.realtimeSinceStartup : UnityEngine.Time.time;
 
@@ -28,13 +29,14 @@ namespace Tokyo {
         private float _pauseTimeOffset;
         private float _manualSetProgress;
 
-        public TokyoLerp(float time, EaseType easeType = EaseType.Linear, bool isIgnoreTimeScale = false) : this(0f, 1f, time, easeType, isIgnoreTimeScale) {}
+        public TokyoLerp(float time, EaseType easeType = EaseType.Linear, UpdateType updateType = UpdateType.Update, bool isIgnoreTimeScale = false) : this(0f, 1f, time, easeType, updateType, isIgnoreTimeScale) {}
 
-        public TokyoLerp(float from, float to, float time, EaseType easeType = EaseType.Linear, bool isIgnoreTimeScale = false) {
+        public TokyoLerp(float from, float to, float time, EaseType easeType = EaseType.Linear, UpdateType updateType = UpdateType.Update, bool isIgnoreTimeScale = false) {
             From = from;
             To = to;
             Time = time;
             Easing = easeType;
+            UpdateType = updateType;
 
             _isIgnoreTimeScale = isIgnoreTimeScale;
 
@@ -58,7 +60,7 @@ namespace Tokyo {
 
             OnLerpUpdate?.Invoke(this);
 
-            if (Progress == 1f) {
+            if (Mathf.Approximately(Progress,1f)) {
                 OnLerpEnd?.Invoke(this);
                 Stop();
             }
@@ -67,8 +69,9 @@ namespace Tokyo {
         public void Stop() {
             OnLerpUpdate = null;
             OnLerpEnd = null;
+            IsEnded = true;
+            
             TokyoLerpManager.Instance().RemoveLerpTask(this);
-            IsStopped = true;
         }
 
         public void Pause() {
