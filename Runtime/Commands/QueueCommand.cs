@@ -33,15 +33,14 @@ namespace Tokyo.Command {
             if (Complete)
                 return;
 
-            if(Terminate) {
+            if (Terminate) {
                 foreach (ICommand cmd in _queue)
                     cmd.TerminateCommand();
                 NotifyComplete();
             }
 
-            if(_queue.Count > 0) {
+            if (_queue.Count > 0) {
                 ICommand cmd = _queue[0];
-                _queue.RemoveAt(0);
                 cmd.AddCompleteHandler(OnCommandComplete);
                 cmd.Execute();
             } else {
@@ -51,7 +50,7 @@ namespace Tokyo.Command {
 
         protected virtual void OnCommandComplete(ICommand cmd) {
             CommandCompleteEvent?.Invoke(this, cmd);
-
+            _queue.Remove(cmd);
             Run();
         }
 
