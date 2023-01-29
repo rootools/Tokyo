@@ -10,7 +10,7 @@ namespace Tokyo.Command {
 
         public void Add(ICommand command) {
             _pool.Add(command);
-            Complete = false;
+            Completed = false;
         }
 
         protected override void ExecInternal() {

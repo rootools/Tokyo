@@ -10,11 +10,24 @@ namespace Tokyo.Command {
 
         public void Add(ICommand command) {
             _queue.Add(command);
-            Complete = false;
+            Completed = false;
         }
 
         protected override void ExecInternal() {
             Run();
+        }
+
+        protected override void TerminateInternal() {
+            foreach (ICommand cmd in _queue.ToList()) {
+                cmd.RemoveCompleteHandler(OnCommandComplete);
+                CommandCompleteEvent?.Invoke(this, cmd);
+                
+                cmd.TerminateCommand();
+                _queue.Remove(cmd);
+            }
+            
+            base.TerminateInternal();
+            CommandCompleteEvent = null;
         }
 
         public void AddCommandCompleteHandler(Action<QueueCommand, ICommand> completeHandler) {
@@ -30,14 +43,8 @@ namespace Tokyo.Command {
         }
 
         protected virtual void Run() {
-            if (Complete)
+            if (Completed)
                 return;
-
-            if (Terminate) {
-                foreach (ICommand cmd in _queue)
-                    cmd.TerminateCommand();
-                NotifyComplete();
-            }
 
             if (_queue.Count > 0) {
                 ICommand cmd = _queue[0];
