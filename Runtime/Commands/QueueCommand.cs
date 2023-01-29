@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tokyo.Command {
     public class QueueCommand : BaseCommand {
@@ -22,6 +23,10 @@ namespace Tokyo.Command {
         
         public void AddCommandCompleteHandler<T>(Action<QueueCommand, ICommand, T> completeHandler, T userArgs) {
             CommandCompleteEvent += (queue, cmd) => completeHandler?.Invoke(queue, cmd, userArgs);
+        }
+
+        public List<ICommand> GetCommandsList() {
+            return _queue.ToList();
         }
 
         protected virtual void Run() {
