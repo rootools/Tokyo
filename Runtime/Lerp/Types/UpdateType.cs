@@ -3,6 +3,7 @@ namespace Tokyo {
     public enum UpdateType {
         Update,
         FixedUpdate,
-        LateUpdate
+        LateUpdate,
+        OwnUnscaledFixedTimeTickUpdate
     }
 }

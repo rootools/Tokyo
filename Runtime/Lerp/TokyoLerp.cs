@@ -14,6 +14,7 @@ namespace Tokyo {
         public float Time { get; private set; }
         public EaseType Easing  { get; private set; }
         public UpdateType UpdateType { get; private set; }
+        public float OwnTimeTick { get; private set; }
 
         public float Progress { get; private set; }
         public float Value { get; private set; }
@@ -29,9 +30,9 @@ namespace Tokyo {
         private float _pauseTimeOffset;
         private float _manualSetProgress;
 
-        public TokyoLerp(float time, EaseType easeType = EaseType.Linear, UpdateType updateType = UpdateType.Update, bool isIgnoreTimeScale = false) : this(0f, 1f, time, easeType, updateType, isIgnoreTimeScale) {}
+        public TokyoLerp(float time, EaseType easeType = EaseType.Linear, UpdateType updateType = UpdateType.Update, bool isIgnoreTimeScale = false, float ownTimeTick = 1f) : this(0f, 1f, time, easeType, updateType, isIgnoreTimeScale, ownTimeTick) {}
 
-        public TokyoLerp(float from, float to, float time, EaseType easeType = EaseType.Linear, UpdateType updateType = UpdateType.Update, bool isIgnoreTimeScale = false) {
+        public TokyoLerp(float from, float to, float time, EaseType easeType = EaseType.Linear, UpdateType updateType = UpdateType.Update, bool isIgnoreTimeScale = false, float ownTimeTick = 1f) {
             From = from;
             To = to;
             Time = time;
@@ -39,6 +40,8 @@ namespace Tokyo {
             UpdateType = updateType;
 
             _isIgnoreTimeScale = isIgnoreTimeScale;
+
+            OwnTimeTick = ownTimeTick;
 
             _startTime = CurrentTime;
             TokyoLerpManager.Instance().AddLerpTask(this);
