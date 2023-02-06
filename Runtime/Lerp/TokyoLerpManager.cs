@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -43,18 +42,6 @@ namespace Tokyo {
 
         private void Update() {
             foreach(TokyoLerp task in _tasksList.ToList().Where(i => i.UpdateType == UpdateType.Update)) {
-                task.Iterate();
-            }
-        }
-
-        private void FixedUpdate() {
-            foreach(TokyoLerp task in _tasksList.ToList().Where(i => i.UpdateType == UpdateType.FixedUpdate)) {
-                task.Iterate();
-            }
-        }
-
-        private void LateUpdate() {
-            foreach(TokyoLerp task in _tasksList.ToList().Where(i => i.UpdateType == UpdateType.LateUpdate)) {
                 task.Iterate();
             }
         }
