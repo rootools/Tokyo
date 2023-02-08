@@ -36,11 +36,11 @@ namespace Tokyo {
             
             if (!_tasksList.Any(i => i.UpdateType == UpdateType.OwnUnscaledFixedTimeTickUpdate && Mathf.Approximately(i.OwnTimeTick, lerpParams.OwnTimeTick))) {
                 
-                if (_ownUnscaledFixedTimeTickUpdates[lerpParams.OwnTimeTick] == null)
+                if (!_ownUnscaledFixedTimeTickUpdates.ContainsKey(lerpParams.OwnTimeTick) || _ownUnscaledFixedTimeTickUpdates[lerpParams.OwnTimeTick] == null)
                     return;
                 
                 StopCoroutine(_ownUnscaledFixedTimeTickUpdates[lerpParams.OwnTimeTick]);
-                _ownUnscaledFixedTimeTickUpdates[lerpParams.OwnTimeTick] = null;
+                _ownUnscaledFixedTimeTickUpdates.Remove(lerpParams.OwnTimeTick);
             }
         }
 
