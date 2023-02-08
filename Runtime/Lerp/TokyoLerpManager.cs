@@ -35,20 +35,24 @@ namespace Tokyo {
                 return;
             
             if (!_tasksList.Any(i => i.UpdateType == UpdateType.OwnUnscaledFixedTimeTickUpdate && Mathf.Approximately(i.OwnTimeTick, lerpParams.OwnTimeTick))) {
+                
+                if (_ownUnscaledFixedTimeTickUpdates[lerpParams.OwnTimeTick] == null)
+                    return;
+                
                 StopCoroutine(_ownUnscaledFixedTimeTickUpdates[lerpParams.OwnTimeTick]);
                 _ownUnscaledFixedTimeTickUpdates[lerpParams.OwnTimeTick] = null;
             }
         }
 
         private void Update() {
-            foreach(TokyoLerp task in _tasksList.ToList().Where(i => i.UpdateType == UpdateType.Update)) {
+            foreach(TokyoLerp task in _tasksList.Where(i => i.UpdateType == UpdateType.Update).ToList()) {
                 task.Iterate();
             }
         }
 
         private IEnumerator StartOwnUnscaledFixedTimeTickUpdate(float timeTick) {
             while (true) {
-                foreach(TokyoLerp task in _tasksList.ToList().Where(i => i.UpdateType == UpdateType.OwnUnscaledFixedTimeTickUpdate && Mathf.Approximately(i.OwnTimeTick, timeTick))) {
+                foreach(TokyoLerp task in _tasksList.Where(i => i.UpdateType == UpdateType.OwnUnscaledFixedTimeTickUpdate && Mathf.Approximately(i.OwnTimeTick, timeTick)).ToList()) {
                     task.Iterate();
                 }
                 yield return new WaitForSecondsRealtime(timeTick);
