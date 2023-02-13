@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Tokyo.Command {
 
@@ -18,6 +19,19 @@ namespace Tokyo.Command {
                 cmd.AddCompleteHandler(OnCommandComplete);
                 cmd.Execute();
             }
+        }
+        
+        protected override void TerminateInternal() {
+            foreach (ICommand cmd in _pool.ToList()) {
+                cmd.RemoveCompleteHandler(OnCommandComplete);
+                CommandCompleteEvent?.Invoke(this, cmd);
+                
+                cmd.TerminateCommand();
+                _pool.Remove(cmd);
+            }
+            
+            base.TerminateInternal();
+            CommandCompleteEvent = null;
         }
 
         protected virtual void OnCommandComplete(ICommand cmd) {
