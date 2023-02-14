@@ -5,10 +5,13 @@ namespace Tokyo.Command {
     public class DelayCommand : BaseCommand {
 
         private readonly float _delayTime;
+        private bool _isIgnoreTimeScale;
+        
         private Coroutine _delayCoroutine;
 
-        public DelayCommand(float delayTime) {
+        public DelayCommand(float delayTime, bool isIgnoreTimeScale = false) {
             _delayTime = delayTime;
+            _isIgnoreTimeScale = isIgnoreTimeScale;
         }
 
         protected override void ExecInternal() {
@@ -16,7 +19,11 @@ namespace Tokyo.Command {
         }
 
         private IEnumerator Delay(float delayTime) {
-            yield return new WaitForSeconds(delayTime);
+            if (!_isIgnoreTimeScale)
+                yield return new WaitForSeconds(delayTime);
+            else
+                yield return new WaitForSecondsRealtime(delayTime);
+            
             NotifyComplete();
         }
 
