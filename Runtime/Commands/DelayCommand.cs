@@ -28,7 +28,7 @@ namespace Tokyo.Command {
         }
 
         protected override void TerminateInternal() {
-            if(_delayCoroutine != null)
+            if(_delayCoroutine != null && TokyoCommandMB.Instance() != null)
                 TokyoCommandMB.Instance().StopCoroutine(_delayCoroutine);
             base.TerminateInternal();
         }
