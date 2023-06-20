@@ -25,9 +25,9 @@ namespace Tokyo {
 
         private readonly float _startTime;
         private readonly bool _isIgnoreTimeScale;
-
-        private float _startPauseTime;
-        private float _pauseTimeOffset;
+        private float _passedTime;
+        private float _prevTickTime;
+        
         private float _manualSetProgress;
         private float _manualTimeScale = 1f;
 
@@ -45,6 +45,8 @@ namespace Tokyo {
             OwnTimeTick = ownTimeTick;
 
             _startTime = CurrentTime;
+            _prevTickTime = CurrentTime;
+            _passedTime = 0f;
             TokyoLerpManager.Instance().AddLerpTask(this);
         }
 
@@ -55,11 +57,15 @@ namespace Tokyo {
             if (Time == 0f)
                 Progress = 1f;
             else {
-                float passedTime = CurrentTime - _pauseTimeOffset - _startTime + (Time * _manualSetProgress);
+                float tickTime = (CurrentTime - _prevTickTime) * _manualTimeScale; 
                 
-                passedTime *= _manualTimeScale;
+                _passedTime += tickTime;
 
-                Progress = Mathf.Clamp01(passedTime / Time);
+                _prevTickTime = CurrentTime;
+
+                float passedTimeAndManualProgress = _passedTime + (Time * _manualSetProgress);
+
+                Progress = Mathf.Clamp01(passedTimeAndManualProgress / Time);
             }
 
             Value = Mathf.Lerp(From, To, TokyoEasings.Ease(Progress, Easing));
@@ -82,12 +88,10 @@ namespace Tokyo {
 
         public void Pause() {
             IsPaused = true;
-            _startPauseTime = CurrentTime;
         }
 
         public void Resume() {
             IsPaused = false;
-            _pauseTimeOffset = CurrentTime - _startPauseTime;
         }
 
         public void SetProgress(float progress) {
