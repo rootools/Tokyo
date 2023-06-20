@@ -29,6 +29,7 @@ namespace Tokyo {
         private float _startPauseTime;
         private float _pauseTimeOffset;
         private float _manualSetProgress;
+        private float _manualTimeScale = 1f;
 
         public TokyoLerp(float time, EaseType easeType = EaseType.Linear, UpdateType updateType = UpdateType.Update, bool isIgnoreTimeScale = false, float ownTimeTick = 1f) : this(0f, 1f, time, easeType, updateType, isIgnoreTimeScale, ownTimeTick) {}
 
@@ -55,6 +56,8 @@ namespace Tokyo {
                 Progress = 1f;
             else {
                 float passedTime = CurrentTime - _pauseTimeOffset - _startTime + (Time * _manualSetProgress);
+                
+                passedTime *= _manualTimeScale;
 
                 Progress = Mathf.Clamp01(passedTime / Time);
             }
@@ -89,6 +92,10 @@ namespace Tokyo {
 
         public void SetProgress(float progress) {
             _manualSetProgress = progress;
+        }
+
+        public void SetManualTimeScale(float timeScale) {
+            _manualTimeScale = timeScale;
         }
 
     }
