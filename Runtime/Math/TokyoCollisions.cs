@@ -30,17 +30,17 @@ namespace Tokyo.Math.Collisions {
             return _circleRectangleClosestPoint.sqrMagnitude < circleRadius * circleRadius;
         }
         
-        public static Vector2? IntersectLines(Vector2 l1pa, Vector2 l1pb, Vector2 l2pa, Vector2 l2pb) {
+        public static bool IntersectLinesPoint(Vector2 l1pa, Vector2 l1pb, Vector2 l2pa, Vector2 l2pb, ref Vector2 intersectPoint) {
             float denominator = ((l1pb.x - l1pa.x) * (l2pb.y - l2pa.y)) - ((l1pb.y - l1pa.y) * (l2pb.x - l2pa.x));
 
             if (denominator == 0) // lines are parallel and will never intersect
-                return null;
+                return false;
 
             float numerator1 = ((l1pa.y - l2pa.y) * (l2pb.x - l2pa.x)) - ((l1pa.x - l2pa.x) * (l2pb.y - l2pa.y));
             float numerator2 = ((l1pa.y - l2pa.y) * (l1pb.x - l1pa.x)) - ((l1pa.x - l2pa.x) * (l1pb.y - l1pa.y));
     
             if (numerator1 == 0 || numerator2 == 0) // lines are coincident and intersect everywhere
-                return null;
+                return false;
 
             float r = numerator1 / denominator;
             float s = numerator2 / denominator;
@@ -49,11 +49,36 @@ namespace Tokyo.Math.Collisions {
             if ((r >= 0 && r <= 1) && (s >= 0 && s <= 1)) {
                 float x = l1pa.x + (r * (l1pb.x - l1pa.x));
                 float y = l1pa.y + (r * (l1pb.y - l1pa.y));
+
+                intersectPoint.x = x;
+                intersectPoint.y = y;
         
-                return new Vector2(x, y);
-            } else {
-                return null;
+                return true;
             }
+            
+            return false;
+        }
+        
+        public static bool IntersectLines(Vector2 l1pa, Vector2 l1pb, Vector2 l2pa, Vector2 l2pb) {
+            float denominator = ((l1pb.x - l1pa.x) * (l2pb.y - l2pa.y)) - ((l1pb.y - l1pa.y) * (l2pb.x - l2pa.x));
+
+            if (denominator == 0) // lines are parallel and will never intersect
+                return false;
+
+            float numerator1 = ((l1pa.y - l2pa.y) * (l2pb.x - l2pa.x)) - ((l1pa.x - l2pa.x) * (l2pb.y - l2pa.y));
+            float numerator2 = ((l1pa.y - l2pa.y) * (l1pb.x - l1pa.x)) - ((l1pa.x - l2pa.x) * (l1pb.y - l1pa.y));
+    
+            if (numerator1 == 0 || numerator2 == 0) // lines are coincident and intersect everywhere
+                return false;
+
+            float r = numerator1 / denominator;
+            float s = numerator2 / denominator;
+
+            // lines intersect each other
+            if ((r >= 0 && r <= 1) && (s >= 0 && s <= 1))
+                return true;
+            
+            return false;
         }
 
     }
